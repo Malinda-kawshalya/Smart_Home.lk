@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "E+mZ6ixs25qmquORynsBvXd3OHxWVwWp41jndUX2DwI=",
+  "Source": "smarthome",
+  "BasePath": "_content/smarthome",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
