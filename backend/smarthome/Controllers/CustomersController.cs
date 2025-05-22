@@ -1,47 +1,35 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using smarthome.Data;
-using YourNamespace.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace smarthome.Controllers
+namespace YourNamespace.Models
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class CustomersController : ControllerBase
+    [Table("CUSTOMER")]
+    public class Customer
     {
-        private readonly AppDbContext _context;
+        [Key]
+        [Column("customer_id")]
+        public int CustomerId { get; set; }
 
-        public CustomersController(AppDbContext context)
-        {
-            _context = context;
-        }
+        [Column("customer_name")]
+        public string CustomerName { get; set; }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
-        {
-            return await _context.Customers.ToListAsync();
-        }
+        [Column("email")]
+        public string Email { get; set; }
 
-        [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
-        {
-            _context.Customers.Add(customer);
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
+        [Column("phone")]
+        public string Phone { get; set; }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(int id)
-        {
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer == null) return NotFound();
+        [Column("location_id")]
+        public int? LocationId { get; set; }
 
-            _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
+        [Column("customer_type_id")]
+        public int? CustomerTypeId { get; set; }
+
+        [Column("registration_date")]
+        public DateTime? RegistrationDate { get; set; }
+
+        [Column("loyalty_points")]
+        public int? LoyaltyPoints { get; set; }
     }
 }

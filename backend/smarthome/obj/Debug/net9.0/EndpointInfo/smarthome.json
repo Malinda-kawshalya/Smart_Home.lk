@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.4",
   "info": {
-    "title": "smarthome",
-    "version": "1.0"
+    "title": "SmartHome API",
+    "version": "v1"
   },
   "paths": {
     "/api/Customers": {
