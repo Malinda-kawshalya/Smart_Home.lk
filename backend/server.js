@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const customerRoutes = require('./routes/customerroutes');
+const productRoutes = require('./routes/productroutes');
 
 // Load environment variables
 dotenv.config();
@@ -20,6 +22,10 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://malindakawshalya:mkk1
   .catch((err) => {
     console.error('MongoDB connection error:', err);
   });
+
+// Routes
+app.use('/api/customers', customerRoutes);
+app.use('/api/products', productRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
