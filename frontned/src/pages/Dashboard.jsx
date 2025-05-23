@@ -1,173 +1,136 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
+import { FaUsers, FaBox, FaShoppingCart, FaMoneyBillWave } from 'react-icons/fa';
 import axios from 'axios';
+import '../styles/dashboard.css';
 
-function DashboardPage() {
-  // States for customers and products
-  const [customers, setCustomers] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [selectedCustomer, setSelectedCustomer] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState('');
-  const [discount, setDiscount] = useState('');
-  const [finalPrice, setFinalPrice] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+function Dashboard() {
+  const [stats, setStats] = useState({
+    customers: 0,
+    products: 0,
+    orders: 0,
+    revenue: 0
+  });
+  const [loading, setLoading] = useState(true);
 
-  // Fetch customers and products on component mount
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchStats = async () => {
       try {
+        setLoading(true);
+        // In a real app, you would fetch this data from your API
         const [customersRes, productsRes] = await Promise.all([
           axios.get('http://localhost:5000/api/customers'),
           axios.get('http://localhost:5000/api/products')
         ]);
-        setCustomers(customersRes.data);
-        setProducts(productsRes.data);
+        
+        setStats({
+          customers: customersRes.data.length,
+          products: productsRes.data.length,
+          orders: Math.floor(Math.random() * 100), // Placeholder
+          revenue: Math.floor(Math.random() * 10000) // Placeholder
+        });
+        setLoading(false);
       } catch (err) {
-        console.error('Error fetching data:', err);
-        setError('Error loading data');
+        console.error('Error fetching dashboard stats:', err);
+        setLoading(false);
       }
     };
 
-    fetchData();
+    fetchStats();
   }, []);
 
-  // Get discount range based on loyalty points
-  const getDiscountRange = (loyaltyPoints) => {
-    if (loyaltyPoints >= 400) return { min: 15, max: 25 };
-    if (loyaltyPoints >= 300) return { min: 10, max: 20 };
-    if (loyaltyPoints >= 200) return { min: 8, max: 15 };
-    if (loyaltyPoints >= 100) return { min: 5, max: 10 };
-    return { min: 0, max: 5 };
-  };
-
-  // Handle calculation
-  const handleCalculate = (e) => {
-    e.preventDefault();
-    
-    const customer = customers.find(c => c._id === selectedCustomer);
-    const product = products.find(p => p._id === selectedProduct);
-
-    if (!customer || !product) {
-      setError('Please select both customer and product');
-      return;
-    }
-
-    const discountAmount = (product.base_price * (parseFloat(discount) / 100));
-    const calculatedPrice = product.base_price - discountAmount;
-    
-    setFinalPrice({
-      originalPrice: product.base_price,
-      discountAmount,
-      finalPrice: calculatedPrice,
-      discountPercentage: discount
-    });
-  };
+  const StatCard = ({ title, value, icon, color, isLoading }) => (
+    <Card className="stat-card">
+      <Card.Body>
+        <div className="stat-icon" style={{ backgroundColor: `${color}20` }}>
+          {icon}
+        </div>
+        <div className="stat-info">
+          <h3 className={`stat-value ${isLoading ? 'placeholder' : ''}`}>
+            {isLoading ? '' : value}
+          </h3>
+          <p className="stat-title">{title}</p>
+        </div>
+      </Card.Body>
+    </Card>
+  );
 
   return (
-    <Container fluid className="py-4">
-      <Card className="shadow-sm">
-        <Card.Header className="bg-light">
-          <h5 className="mb-0">Calculate Product Discount</h5>
-        </Card.Header>
-        <Card.Body>
-          {error && <Alert variant="danger">{error}</Alert>}
-          
-          <Form onSubmit={handleCalculate}>
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Select Customer</Form.Label>
-                  <Form.Select 
-                    value={selectedCustomer}
-                    onChange={(e) => {
-                      setSelectedCustomer(e.target.value);
-                      setFinalPrice(null);
-                    }}
-                    required
-                  >
-                    <option value="">Choose customer...</option>
-                    {customers.map(customer => (
-                      <option key={customer._id} value={customer._id}>
-                        {customer.customer_name} (Points: {customer.loyalty_points})
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-              
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Select Product</Form.Label>
-                  <Form.Select
-                    value={selectedProduct}
-                    onChange={(e) => {
-                      setSelectedProduct(e.target.value);
-                      setFinalPrice(null);
-                    }}
-                    required
-                  >
-                    <option value="">Choose product...</option>
-                    {products.map(product => (
-                      <option key={product._id} value={product._id}>
-                        {product.product_name} (Rs.{product.base_price})
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-            </Row>
+    <div className="dashboard-page">
+      <h2 className="page-title">Dashboard</h2>
+      
+      <Row className="stat-cards-row">
+        <Col lg={3} md={6} sm={12} className="mb-4">
+          <StatCard 
+            title="Total Customers"
+            value={stats.customers}
+            icon={<FaUsers size={24} color="#0b5ed7" />}
+            color="#0b5ed7"
+            isLoading={loading}
+          />
+        </Col>
+        <Col lg={3} md={6} sm={12} className="mb-4">
+          <StatCard 
+            title="Total Products"
+            value={stats.products}
+            icon={<FaBox size={24} color="#198754" />}
+            color="#198754"
+            isLoading={loading}
+          />
+        </Col>
+        <Col lg={3} md={6} sm={12} className="mb-4">
+          <StatCard 
+            title="Total Orders"
+            value={stats.orders}
+            icon={<FaShoppingCart size={24} color="#dc3545" />}
+            color="#dc3545"
+            isLoading={loading}
+          />
+        </Col>
+        <Col lg={3} md={6} sm={12} className="mb-4">
+          <StatCard 
+            title="Total Revenue"
+            value={`Rs.${stats.revenue.toLocaleString()}`}
+            icon={<FaMoneyBillWave size={24} color="#ffc107" />}
+            color="#ffc107"
+            isLoading={loading}
+          />
+        </Col>
+      </Row>
 
-            {selectedCustomer && selectedProduct && (
-              <Form.Group className="mb-3">
-                <Form.Label>
-                  Discount (%) - 
-                  {(() => {
-                    const customer = customers.find(c => c._id === selectedCustomer);
-                    const range = getDiscountRange(customer.loyalty_points);
-                    return ` Range: ${range.min}% - ${range.max}%`;
-                  })()}
-                </Form.Label>
-                <Form.Control
-                  type="number"
-                  step="0.1"
-                  value={discount}
-                  onChange={(e) => setDiscount(e.target.value)}
-                  required
-                  min={getDiscountRange(customers.find(c => c._id === selectedCustomer)?.loyalty_points).min}
-                  max={getDiscountRange(customers.find(c => c._id === selectedCustomer)?.loyalty_points).max}
-                />
-              </Form.Group>
-            )}
-
-            <Button 
-              variant="primary" 
-              type="submit"
-              disabled={loading || !selectedCustomer || !selectedProduct || !discount}
-            >
-              Calculate Final Price
-            </Button>
-          </Form>
-
-          {finalPrice && (
-            <Alert variant="success" className="mt-4">
-              <h6>Price Breakdown</h6>
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <div>Original Price: <strong>Rs.{finalPrice.originalPrice.toFixed(2)}</strong></div>
-                  <div>Discount Amount: <strong>Rs.{finalPrice.discountAmount.toFixed(2)}</strong></div>
-                  <div>Final Price: <strong>Rs.{finalPrice.finalPrice.toFixed(2)}</strong></div>
-                </div>
-                <div className="fs-3 text-success">
-                  -{finalPrice.discountPercentage}%
-                </div>
+      {/* Additional dashboard content can be added here */}
+      <Row>
+        <Col lg={8} className="mb-4">
+          <Card className="chart-card">
+            <Card.Header>Recent Activity</Card.Header>
+            <Card.Body>
+              {/* You can add charts or graphs here */}
+              <div className="placeholder-chart">
+                <p>Sales chart will appear here</p>
               </div>
-            </Alert>
-          )}
-        </Card.Body>
-      </Card>
-    </Container>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col lg={4} className="mb-4">
+          <Card className="top-customers-card">
+            <Card.Header>Top Customers</Card.Header>
+            <Card.Body>
+              {/* You can add a list of top customers here */}
+              <ul className="customer-list">
+                {loading ? (
+                  Array(5).fill().map((_, i) => (
+                    <li key={i} className="placeholder-list-item"></li>
+                  ))
+                ) : (
+                  <p>Customer list will appear here</p>
+                )}
+              </ul>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </div>
   );
 }
 
-export default DashboardPage;
+export default Dashboard;

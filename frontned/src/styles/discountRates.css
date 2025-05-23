@@ -1,0 +1,168 @@
+.discount-rates-page {
+  padding: 0.5rem 0;
+}
+
+.page-title {
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.calculator-card,
+.result-card,
+.discount-tiers-card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  height: 100%;
+}
+
+.calculator-card .card-header,
+.result-card .card-header,
+.discount-tiers-card .card-header {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.header-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(13, 110, 253, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+  color: #0d6efd;
+}
+
+.calculator-card .card-header h5,
+.result-card .card-header h5,
+.discount-tiers-card .card-header h5 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.calculator-card .card-body {
+  padding: 1.5rem;
+}
+
+.discount-range-text {
+  margin-left: 0.5rem;
+  font-weight: 500;
+  color: #0d6efd;
+  font-size: 0.9rem;
+}
+
+.calculate-btn {
+  display: block;
+  width: 100%;
+  padding: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.calculate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(11, 94, 215, 0.3);
+}
+
+.result-card {
+  background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
+  transition: all 0.3s ease;
+}
+
+.result-card.has-result {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #28a745;
+}
+
+.placeholder-result {
+  display: flex;
+  height: 200px;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  text-align: center;
+  padding: 1rem;
+}
+
+.price-result {
+  padding: 1.5rem;
+  position: relative;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.result-label {
+  font-weight: 500;
+  color: #495057;
+}
+
+.result-value {
+  font-weight: 600;
+}
+
+.discount-amount {
+  color: #dc3545;
+}
+
+.divider {
+  height: 1px;
+  background-color: #e9ecef;
+  margin: 1rem 0;
+}
+
+.final-price {
+  font-size: 1.4rem;
+}
+
+.discount-badge {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background-color: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.tier-table {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.tier-table th {
+  background-color: rgba(248, 249, 250, 0.7);
+  font-weight: 600;
+  color: #495057;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.tier-table td {
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.tier-table tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 991.98px) {
+  .result-card {
+    margin-bottom: 1.5rem;
+  }
+
+  .discount-tiers-card {
+    margin-top: 0 !important;
+  }
+}
